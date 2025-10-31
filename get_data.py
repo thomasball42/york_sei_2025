@@ -1,13 +1,13 @@
+"""Downloads required input data files from specified URLs (mapspami and hyde databases) 
+and saves them to designated directories
+
+TB 31st Oct 2025"""
+
 import requests
 import os
 import json
-from easyDataverse import Dataverse
+from easyDataverse import Dataverse  # type: ignore
 import zipfile
-
-dataverse_api_token = "2e41a1d3-e588-4246-b5ee-3ddf073efbb1" # security is my middle name
-dataverse = Dataverse("https://dataverse.harvard.edu/",
-                      api_token = dataverse_api_token)
-
 
 def download_file(url, filename):
     try:
@@ -31,39 +31,45 @@ def download_file(url, filename):
     except Exception as e:
         print(f"\n An unexpected error occurred: {e}")
 
-with open('data_urls', 'r') as f:
+with open('data_urls.json', 'r') as f:
     data_urls = json.load(f)
 
-
 for dataname, datasets in data_urls.items():
-    fpath = os.path.join('data', dataname)
+    fpath = os.path.join('data', 'inputs', dataname)
     if not os.path.isdir(fpath):
         os.makedirs(fpath)
 
     for dataset, info in datasets.items():
         url = info.get('url')
-        filename = f"{dataname}_{dataset}.zip"
+        filename = f"{dataname}_{dataset}"
         target_path = os.path.join(fpath, filename)
         
-        if "dataverse" in url.lower():
-            
-            doi = info.get("doi")
-            version = info.get("version", "latest")
-            dataset = dataverse.load_dataset(
-                pid=doi,
-                version=version,
-                filedir=target_path,
-            )
-            
-            
-        elif url:
-            
-            download_file(url, target_path)
-    
-            
-        else:
-            print(f"\n--- Skipping **{dataset}** - Missing 'url' or 'doi' in data_urls file. ---")
+        if not os.path.isfile(target_path):
+            print(f"\n--- Downloading **{dataset}** ---")
+            if "dataverse" in url.lower():
+                
+                # This gets the mapspam data
+                doi = info.get("doi")
+                version = info.get("version", "latest")
 
-        if os.path.isfile(target_path):
-            with zipfile.ZipFile(target_path, 'r') as zip_ref:
-                zip_ref.extractall(fpath)
+                dataverse_api_token = "2e41a1d3-e588-4246-b5ee-3ddf073efbb1" # security is my middle name
+                dataverse = Dataverse("https://dataverse.harvard.edu/",
+                      api_token = dataverse_api_token)
+
+                dataset = dataverse.load_dataset(
+                    pid=doi,
+                    version=version,
+                    filedir=target_path,
+                )
+                
+                
+            elif url:
+                
+                # this gets the HYDE data and unzips it
+                download_file(url, target_path)
+                if os.path.isfile(target_path):
+                    with zipfile.ZipFile(target_path, 'r') as zip_ref:
+                        zip_ref.extractall(fpath)
+        
+            else:
+                print(f"\nError: Missing 'url' or 'doi' in data_urls.json file for **{dataset}**")

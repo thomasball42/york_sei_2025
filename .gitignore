@@ -1,5 +1,6 @@
 data/
 env/
+data_index.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
