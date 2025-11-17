@@ -33,9 +33,13 @@ with open("data_index.json", 'r') as f:
 
 for year in years:
     # sum mapspam areas
-    if not os.path.isfile(os.path.join('data', 'food', f"mapspam_all_{year}.tif")):
+    spam_year_file = os.path.join('data', 'food', f"mapspam_all_{year}.tif")
+    if not os.path.isfile(spam_year_file):
         print(f"Summarising Mapspam layers for year {year}...", end=" ")
         _build_spam_layer.summarise_spam_layers(data_index.get(year, {}), year)
         print("done.")
     else:
         print(f"Mapspam summary for year {year} exists - skipping creation")
+
+
+
