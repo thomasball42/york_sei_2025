@@ -91,7 +91,8 @@
                 "path": "data/food/hyde/modified_grazing2000AD.asc",
                 "unit": "grazing area in km2 / pixel"
             }
-        }
+        },
+        "mapspam_total_percentage": "data/food/mapspam_all_2000.tif"
     },
     "2005": {
         "mapspam": {
@@ -269,7 +270,8 @@
                 "path": "data/food/hyde/modified_grazing2005AD.asc",
                 "unit": "grazing area in km2 / pixel"
             }
-        }
+        },
+        "mapspam_total_percentage": "data/food/mapspam_all_2005.tif"
     },
     "2010": {
         "mapspam": {
@@ -447,7 +449,8 @@
                 "path": "data/food/hyde/modified_grazing2010AD.asc",
                 "unit": "grazing area in km2 / pixel"
             }
-        }
+        },
+        "mapspam_total_percentage": "data/food/mapspam_all_2010.tif"
     },
     "2020": {
         "mapspam": {
@@ -641,6 +644,7 @@
                 "path": "data/food/hyde/modified_grazing2020AD.asc",
                 "unit": "grazing area in km2 / pixel"
             }
-        }
+        },
+        "mapspam_total_percentage": "data/food/mapspam_all_2020.tif"
     }
 }
