@@ -1,0 +1,3 @@
+[submodule "LIFE"]
+	path = LIFE
+	url = https://github.com/quantifyearth/LIFE.git
