@@ -92,7 +92,7 @@
                 "unit": "grazing area in km2 / pixel"
             }
         },
-        "mapspam_total_percentage": "data/food/mapspam_all_2000.tif"
+        "mapspam_total_percentage": "data/food/mapspam/mapspam_all_2000.tif"
     },
     "2005": {
         "mapspam": {
@@ -271,7 +271,7 @@
                 "unit": "grazing area in km2 / pixel"
             }
         },
-        "mapspam_total_percentage": "data/food/mapspam_all_2005.tif"
+        "mapspam_total_percentage": "data/food/mapspam/mapspam_all_2005.tif"
     },
     "2010": {
         "mapspam": {
@@ -450,7 +450,7 @@
                 "unit": "grazing area in km2 / pixel"
             }
         },
-        "mapspam_total_percentage": "data/food/mapspam_all_2010.tif"
+        "mapspam_total_percentage": "data/food/mapspam/mapspam_all_2010.tif"
     },
     "2020": {
         "mapspam": {
@@ -645,6 +645,6 @@
                 "unit": "grazing area in km2 / pixel"
             }
         },
-        "mapspam_total_percentage": "data/food/mapspam_all_2020.tif"
+        "mapspam_total_percentage": "data/food/mapspam/mapspam_all_2020.tif"
     }
 }

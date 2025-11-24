@@ -11,6 +11,11 @@ multithread = 16
 overwrite = False
 years = ["2000", "2005", "2010", "2020"] # hardcoding because I don't think these will change in the immediate future..
 
+# create directories for intermediate and output data
+for _ in ["food","habitat", os.path.join("inputs", "habitat")]:
+    if not os.path.isdir(os.path.join('data', _)):
+        os.makedirs(os.path.join('data', _), exist_ok=True)
+
 _get_data.get_data() # download data if not already present
 
 # generate crosswalk
@@ -26,11 +31,6 @@ with open("data_urls.json", 'r') as f:
         data_urls = json.load(f)
 
 data_index = {} # create a list of files and paths
-
-# create directories for intermediate and output data
-for _ in ["food","habitat"]:
-    if not os.path.isdir(os.path.join('data', _)):
-        os.makedirs(os.path.join('data', _), exist_ok=True)
 
 f = []
 for path, subdirs, files in os.walk('data/inputs'):
@@ -80,7 +80,7 @@ for year in years:
         if not os.path.isdir(os.path.join("data", "food", "hyde")):
             os.makedirs(os.path.join("data", "food", "hyde"), exist_ok=True)
         if os.path.isfile(hyde_year_path):
-            subprocess.run(f"sed 's/0.0833333/0.08333333333333333/' {hyde_year_path} > {mod_path}", shell=True)
+            subprocess.run(f"sed 's/0.0833333/0.083333333333333/' {hyde_year_path} > {mod_path}", shell=True)
             # subprocess.run(f"sed 's/0.0833333/0.083333000000000/' {hyde_year_path} > {mod_path}", shell=True)
         else:
             exit(f"Make sure to download and extract hyde data for year {year} first")
@@ -96,6 +96,8 @@ for year in years:
             }
         }
     }
+
+
 
 with open("data_index.json", 'w') as f:
     data_index = json.dump(data_index, f, indent=4)

@@ -6,7 +6,7 @@ import os
 import tqdm
 
 
-def summarise_spam_layers(year_data, year, target_shape=(2160, 4320)):
+def summarise_spam_layers(year_data, year, spam_year_file, target_shape=(2160, 4320)):
     
     spam_files = year_data.get("mapspam", {})
     global_bounds = (-180.0, -90.0, 180.0, 90.0)
@@ -51,7 +51,7 @@ def summarise_spam_layers(year_data, year, target_shape=(2160, 4320)):
     proportional_output = 100 * (total_hectares / 100) / pixel_areas # (Hectares / 100 = km2) / Area_km2 * 100 = % pixel
     proportional_output = np.where(proportional_output < 0, -1, proportional_output)
 
-    output_filename = os.path.join('data', 'food', f"mapspam_all_{year}.tif")
+    output_filename = spam_year_file
 
     with rasterio.open(
         output_filename,

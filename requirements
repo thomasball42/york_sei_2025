@@ -1,7 +1,7 @@
 requests
 easyDataverse
-zipfile
-git+https://github.com/quantifyearth/yirgacheffe.git gdal[numpy]==3.10.1
+git+https://github.com/quantifyearth/yirgacheffe.git 
+gdal[numpy]==3.10.1
 pandas
 git+https://gitlab.com/daniele.baisero/iucn-modlib.git
 alive_progress
@@ -9,3 +9,4 @@ pathlib
 rasterio
 numpy
 aoh
+tqdm

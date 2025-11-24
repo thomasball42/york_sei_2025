@@ -79,20 +79,29 @@ def get_data():
                     print(f"\nError: Missing 'url' or 'doi' in data_urls.json file for **{dataset}**")#
 
     # get the base 'current' map - this is the same across all runs.
-    if not os.path.isfile(os.path.join('data', 'habitat', 'jung_l2_raw.tif')):
+    if not os.path.isfile(os.path.join('data', "inputs", 'habitat', 'jung_l2_raw.tif')):
         print("Downloading Jung habitat data from zenodo...")
-        command = """reclaimer zenodo --zenodo_id 4058819 \
-                                --filename iucn_habitatclassification_composite_lvl2_ver004.zip \
-                                --extract \
-                                --output data/habitat/jung_l2_raw.tif"""
+        command = f"""reclaimer zenodo --zenodo_id 4058819 \
+                    --filename iucn_habitatclassification_composite_lvl2_ver004.zip \
+                    --extract \
+                    --output {os.path.join('data', "inputs", 'habitat', 'jung_l2_raw.tif')}"""
         subprocess.run(command, shell = True)
 
-    if not os.path.isdir(os.path.join('data', 'habitat', 'lvl2_changemasks_ver004')):
+    if not os.path.isdir(os.path.join('data', "inputs", 'habitat', 'lvl2_changemasks_ver004')):
         print("Downloading Jung habitat change masks from zenodo...")
-        command = """reclaimer zenodo --zenodo_id 4058819 \
-                                --filename lvl2_changemasks_ver004.zip \
-                                --extract \
-                                --output data/habitat/"""
+        command = f"""reclaimer zenodo --zenodo_id 4058819 \
+                    --filename lvl2_changemasks_ver004.zip \
+                    --extract \
+                    --output {os.path.join('data', "inputs", 'habitat')}"""
+        subprocess.run(command, shell = True)
+
+    # get the PNV map
+    if not os.path.isfile(os.path.join('data', "inputs", 'habitat', 'pnv_raw.tif')):
+        print("Downloading Jung potential natural vegetation data from zenodo...")
+        command = f"""reclaimer zenodo --zenodo_id 4038749 \
+                --filename pnv_lvl1_004.zip \
+                --extract \
+                --output {os.path.join('data', "inputs", 'habitat', 'pnv_raw.tif')} """
         subprocess.run(command, shell = True)
 
 if __name__ == "__main__":
