@@ -10,3 +10,9 @@ rasterio
 numpy
 aoh
 tqdm
+psycopg2
+postgis
+git+https://github.com/quantifyearth/seasonality
+duckdb
+psutil
+git+https://github.com/quantifyearth/pyshark

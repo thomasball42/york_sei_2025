@@ -104,5 +104,23 @@ def get_data():
                 --output {os.path.join('data', "inputs", 'habitat', 'pnv_raw.tif')} """
         subprocess.run(command, shell = True)
 
+    if not os.path.isfile(os.path.join("data", "inputs", "elevation.tif")):
+        print("Downloading elevation data from zenodo...")
+        command = f"""reclaimer zenodo --zenodo_id 5719984  
+                    --filename dem-100m-esri54017.tif 
+                    --output {os.path.join('data', "inputs", 'elevation.tif')}"""
+        subprocess.run(command, shell = True)
+        
+    if not os.path.isfile(os.path.join("data", "inputs", "elevation-max.tif")) or not os.path.isfile(os.path.join("data", "inputs", "elevation-min.tif")):
+        print("Generating max elevation map...")
+        command = f"""gdalwarp -t_srs EPSG:4326 -tr 0.083333333333333 -0.083333333333333 -r max -co COMPRESS=LZW -wo NUM_THREADS=40 {os.path.join('data', "inputs", 'elevation.tif')} {os.path.join('data', "inputs", 'elevation-max.tif')}"""
+        subprocess.run(command, shell = True)
+
+        print("Generating min elevation map...")
+        command = f"""gdalwarp -t_srs EPSG:4326 -tr 0.083333333333333 -0.083333333333333 -r min -co COMPRESS=LZW -wo NUM_THREADS=40 {os.path.join('data', "inputs", 'elevation.tif')} {os.path.join('data', "inputs", 'elevation-min.tif')}"""
+        subprocess.run(command, shell = True)
+    else:
+        print("Elevation data already present - skipping download and processing")
+
 if __name__ == "__main__":
     get_data()

@@ -12,20 +12,24 @@ overwrite = False
 years = ["2000", "2005", "2010", "2020"] # hardcoding because I don't think these will change in the immediate future..
 
 # create directories for intermediate and output data
-for _ in ["food","habitat", os.path.join("inputs", "habitat")]:
+for _ in ["food","habitat", os.path.join("inputs", "habitat"), "data_dirs"]:
     if not os.path.isdir(os.path.join('data', _)):
         os.makedirs(os.path.join('data', _), exist_ok=True)
 
-_get_data.get_data() # download data if not already present
-
+for y in years:
+    if not os.path.isdir(os.path.join("data", "data_dirs", y)):
+            os.makedirs(os.path.join('data', "data_dirs", y), exist_ok=True)#
+    
 # generate crosswalk
-if not os.path.isfile('data/crosswalk.csv') or overwrite:
-    print("Generating iucn/Jung crosswalk...", end = " ")
+if not os.path.isfile(os.path.join("data", "inputs", "crosswalk.csv")) or overwrite:
+    print("Generating iucn/Jung crosswalks...", end = " ")
     import LIFE.prepare_layers.generate_crosswalk
-    LIFE.prepare_layers.generate_crosswalk.generate_crosswalk('data/crosswalk.csv')
+    LIFE.prepare_layers.generate_crosswalk.generate_crosswalk(os.path.join("data", "inputs", "crosswalk.csv"))
     print("done.")
 else:
     print("iucn/Jung crosswalk exists - skipping creation")
+
+_get_data.get_data() # download data if not already present
 
 with open("data_urls.json", 'r') as f:
         data_urls = json.load(f)
