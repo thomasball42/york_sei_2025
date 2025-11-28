@@ -8,7 +8,7 @@ import _build_spam_layer
 from _gdal_aligner import realign_geotiff_origin
 from osgeo import gdal
 
-gdal.SetCacheMax(5 * 1024 * 1024 * 1024)
+gdal.SetCacheMax(3 * 1024 * 1024 * 1024)
 
 # years = ["2000", "2005", "2010", "2020"]
 # years = ["2000"]
@@ -174,7 +174,7 @@ for year in years:
         print(f"Food map for year {year} exists - skipping creation")
 
     if not os.path.isfile(os.path.join(current_dir, "lcc_1401.tif")) or overwrite:
-        print(f"Running AOH processing on restoration habitat map for year {year}...")
+        print(f"Running AOH processing on current habitat map for year {year}...")
         command = f"""aoh-habitat-process --habitat {os.path.join(year_dir, 'current_raw.tif')} \
                     --scale 0.083333333333333 \
                     --output {current_dir}"""
@@ -183,7 +183,7 @@ for year in years:
 
 
     # build restoration map
-    if os.path.isfile(os.path.join(current_dir, f'restore_agriculture.tif')) or overwrite:
+    if os.path.isfile(os.path.join(year_dir, f'restore_agriculture.tif')) or overwrite:
         print(f"Restoration habitat map exists - skipping creation")
     else:
         print(f"Creating restoration habitat map for year {year}...")

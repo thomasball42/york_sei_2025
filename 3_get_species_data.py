@@ -17,7 +17,7 @@ def main():
         os.makedirs(os.path.join("data", "species-info", taxon), exist_ok=True)
 
         command = f"""python3 ./prepare_species/extract_species_psql.py --class "{taxon}" \
-                                                            --output "../data/species-info/{taxon}/" \
+                                                            --output {os.path.join("..", "data", "inputs", "species-info", taxon)} \a
                                                             --projection "EPSG:4326"
                                                             """
         proc = subprocess.run(command, shell=True, cwd=os.path.join(os.getcwd(), "LIFE"))
