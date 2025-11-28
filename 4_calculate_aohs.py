@@ -49,5 +49,25 @@ def main():
                     """
         subprocess.run(command, shell = True)
         
+        for _ in ["pnv", "current", "restore_agriculture"]:
+            print(f"Collating results {_}...")
+            command = f""" aoh-collate-data --aoh_results {os.path.join(year_path, "aohs", _)} \
+                        --output {os.path.join(year_path, "aohs", f"{_}.csv")}
+                        """
+            subprocess.run(command, shell = True)
+        
+        if os.path.isdir(os.path.join(year_path, "predictors")):
+            os.makedirs(os.path.join(year_path, "predictors"), exist_ok=True)
+        
+        print("Calculating predictors for analysis...")
+        command = f"""aoh-species-richness --aohs_folder {os.path.join(year_path, "aohs", "current")} \
+                     --output {os.path.join(year_path, "predictors", "species_richness.tif")}"""
+        subprocess.run(command, shell = True)
+        
+        command = f"""aoh-endemism --aohs_folder {os.path.join(year_path, "aohs", "current")} \
+                    --species_richness {os.path.join(year_path, "predictors", "species_richness.tif")}\
+                    --output {os.path.join(year_path, "predictors", "endemism.tif")}"""
+        subprocess.run(command, shell = True)
+        
 if __name__=="__main__":
     main()
