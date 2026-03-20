@@ -8,11 +8,13 @@ import _build_spam_layer
 from _utils import realign_geotiff_origin
 from osgeo import gdal
 
+# os.environ['TMPDIR'] = '/tmp'
+# gdal.SetConfigOption('CPL_TMPDIR', '/tmp')
 gdal.SetCacheMax(3 * 1024 * 1024 * 1024)
 
 years = ["2020"]
 
-multithread = 16
+multithread = 32
 overwrite = False
 data_dirs_path = "data/data_dirs"
 
@@ -22,6 +24,7 @@ def main(data_dirs_path=data_dirs_path):
     if not os.path.isfile(os.path.join('data', 'habitat', "current", f'current_raw.tif')) or overwrite:
         print(f"Creating habitat map from Jung data...")
         import LIFE.prepare_layers.make_current_map
+        os.makedirs(Path("data") / "habitat" / "current", exist_ok=True)
         LIFE.prepare_layers.make_current_map.make_current_map(
             jung_path = Path(os.path.join('data', 'inputs', 'habitat', 'jung_l2_raw.tif')),
             update_masks_path = None,
@@ -34,13 +37,19 @@ def main(data_dirs_path=data_dirs_path):
         print(f"Jung base habitat map exists - skipping creation")
 
     # process current habitat map - this is needed to build the food map later
-    if not os.path.isfile(os.path.join('data', 'habitat', "current", 'lcc_1401.tif')) or not os.path.isfile(os.path.join('data', 'habitat', "current", 'lcc_1402.tif')) or overwrite:
+    if not os.path.isfile(os.path.join('data', 'habitat', "current", 'lcc_1401.tif')) or not os.path.isfile(os.path.join('data', 'habitat', "current", 'lcc_1402.tif')):
         print(f"Running some aoh-processing..")
-        command = f"""aoh-habitat-process --habitat {os.path.join('data', 'habitat', "current",'current_raw.tif')} \
-                    --scale 0.083333333333333 \
-                    --output {os.path.join('data', 'habitat', "current")}"""
-        subprocess.run(command, shell=True)
-        ###### Janky realignment code ######
+        from aoh.habitat_process import habitat_process
+
+        habitat_process(
+                        habitat_path=Path(os.path.join('data', 'habitat', "current",'current_raw.tif')),
+                        pixel_scale=0.08333333333333333,
+                        target_projection="EPSG:4326",
+                        output_directory_path=Path(os.path.join('data', 'habitat', "current")),
+                        process_count=multithread
+                        )
+
+        ##### Janky realignment code ######
         f = []
         for path, subdirs, files in os.walk(os.path.join("data", "habitat")):
             for name in files:
@@ -53,13 +62,15 @@ def main(data_dirs_path=data_dirs_path):
         print(f"AOH-processed habitat maps exist - skipping creation")  
 
     # process pnv habitat map 
-    if not os.path.isdir(os.path.join('data', 'habitat', 'pnv')) or overwrite:
+    if not os.path.exists(os.path.join('data', 'habitat', 'pnv', 'lcc_100.tif')) or overwrite:
         os.makedirs(os.path.join('data', 'habitat', 'pnv'), exist_ok=True)
         print("Processing potential natural vegetation map...")
         command = f"""aoh-habitat-process --habitat {os.path.join('data', "inputs", 'habitat', 'pnv_raw.tif')} \
                     --scale 0.083333333333333 \
-                    --output {os.path.join('data', 'habitat', 'pnv')}"""
-        subprocess.run(command, shell=True)
+                    --projection "EPSG:4326" \
+                    --output {os.path.join('data', 'habitat', 'pnv')}
+                    """
+        subprocess.run(command, shell=True, check = True)
         print("Checking processed habitat map alignment...")
         ###### Janky realignment code ######
         f = []
@@ -71,8 +82,11 @@ def main(data_dirs_path=data_dirs_path):
             realign_geotiff_origin(hab_file, tolerance=1E-6)
             print("done.")
 
+    
     else:
         print(f"AOH-processed PNV map exists - skipping creation")
+
+
 
     # Generate an area scaling map
     if not os.path.isfile(os.path.join('data', "inputs", 'area-per-pixel.tif')) or overwrite:
@@ -81,6 +95,7 @@ def main(data_dirs_path=data_dirs_path):
         subprocess.run(command, cwd= os.path.join(os.getcwd(), 'LIFE'), shell=True)
         print("done.")
 
+    
     # prepare the modified 'current' map
     with open("data_index.json", 'r') as f:
         data_index = json.load(f)
@@ -175,12 +190,14 @@ def main(data_dirs_path=data_dirs_path):
             print(f"Running AOH processing on current habitat map for year {year}...")
             command = f"""aoh-habitat-process --habitat {os.path.join(year_dir, 'current_raw.tif')} \
                         --scale 0.083333333333333 \
+                        --projection "EPSG:4326" \
                         --output {current_dir}"""
-            subprocess.run(command, shell=True)
+            subprocess.run(command, shell=True, check=True)
             print("done.")
-
+        
+        quit()
         # build plantation_world map
-        if os.path.isfile(os.path.join(year_dir, f'restore_agriculture.tif')) or overwrite:
+        if os.path.isfile(os.path.join(year_dir, f'plantation_world.tif')) or overwrite:
             print(f"Plantation map exists - skipping creation")
         else:
             print(f"Creating plantation_world habitat map for year {year}...")
