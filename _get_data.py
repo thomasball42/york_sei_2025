@@ -106,10 +106,10 @@ def get_data():
 
     if not os.path.isfile(os.path.join("data", "inputs", "elevation.tif")):
         print("Downloading elevation data from zenodo...")
-        command = f"""reclaimer zenodo --zenodo_id 5719984  
-                    --filename dem-100m-esri54017.tif 
+        command = f"""reclaimer zenodo --zenodo_id 5719984 \
+                    --filename dem-100m-esri54017.tif \
                     --output {os.path.join('data', "inputs", 'elevation.tif')}"""
-        subprocess.run(command, shell = True)
+        subprocess.run(command, shell = True, check =True)
         
     if not os.path.isfile(os.path.join("data", "inputs", "elevation-max.tif")) or not os.path.isfile(os.path.join("data", "inputs", "elevation-min.tif")):
         print("Generating max elevation map...")

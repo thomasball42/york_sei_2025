@@ -3,10 +3,10 @@ import subprocess
 from pathlib import Path
 import LIFE.utils.speciesgenerator
 
-years = ["2000", "2005", "2010", "2020"]
+years = ["2020"]
 
 multithread = 16
-venv_path = "/maps/tsb42/york_sei_2025/env/"
+venv_path = "/maps/tsb42/plantation_life/venv"
 
 SCENARIOS = ["current", "pnv", "plantation_world"]
 
@@ -17,7 +17,7 @@ def main():
     for year in years:
         year_path = os.path.join(data_dirs_path, str(year))
         
-        if not os.path.isdir(os.path.join(year_path, "aohs")):
+        if not os.path.isdir(os.path.join(year_path, "aohs")) or True:
             os.makedirs(os.path.join(year_path, "aohs"), exist_ok=True)
         
             # this is super quick so don't need to check if it's done
@@ -36,7 +36,8 @@ def main():
                         -j {multithread} \
                         -o {os.path.join(year_path, "aohbatch.log")} \
                         -c {os.path.join(year_path, "aohbatch.csv")} {os.path.join(venv_path, "bin", "aoh-calc")} \
-                        -- --force-habitat
+                        -- --force-habitat \
+                        --pixel-area
                         """
             subprocess.run(command, shell = True)
             
