@@ -3,7 +3,9 @@ import subprocess
 from pathlib import Path
 import LIFE.utils.speciesgenerator
 
-years = ["2020"]
+years = [   "2010", 
+            # "2020"
+            ]
 
 multithread = 16
 venv_path = "/maps/tsb42/plantation_life/venv"

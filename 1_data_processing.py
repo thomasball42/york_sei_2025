@@ -11,7 +11,7 @@ import _get_country_boundaries
 
 multithread = 16
 overwrite = False
-years = ["2020"] # hardcoding because I don't think these will change in the immediate future..
+years = ["2010", "2020"] # hardcoding because I don't think these will change in the immediate future..
 data_dirs_path = "data/data_dirs"
 
 def main(data_dirs_path=data_dirs_path):

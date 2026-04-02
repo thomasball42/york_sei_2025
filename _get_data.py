@@ -122,45 +122,28 @@ def get_data():
     else:
         print("Elevation data already present - skipping download and processing")
 
-    
-    # if not os.path.isfile(os.path.join("data", "inputs", "livestock", "livestock_density_maps.zip")):
-    #     os.makedirs(os.path.join("data", "inputs", "livestock"), exist_ok=True)
-    #     print("Downloading livestock data from zenodo...")
-    #     # command = f"""reclaimer zenodo --zenodo_id 17128483\
-    #     #             --filename livestock_density_maps.zip\
-    #     #             --extract\
-    #     #             --output {os.path.join('data', "inputs", 'livestock')}"""
-    #     command = (
-    #         f"reclaimer zenodo "
-    #         f"--zenodo_id 17128483 "
-    #         f"--filename livestock_density_maps.zip "
-    #         f"--extract "
-    #         f"--output {os.path.join('data', 'inputs', 'livestock')}"
-    #     )
-    #     subprocess.run(command, shell = True)
+    # out_dir = os.path.join("data", "inputs", "livestock")
+    # if not os.path.isfile(os.path.join(out_dir, "LivestockMap.zip")) or not os.path.isfile(os.path.join(out_dir, "MapUncertainty.zip")):    
+    #     os.makedirs(out_dir, exist_ok=True)
 
-    out_dir = os.path.join("data", "inputs", "livestock")
-    if not os.path.isfile(os.path.join(out_dir, "LivestockMap.zip")) or not os.path.isfile(os.path.join(out_dir, "MapUncertainty.zip")):    
-        os.makedirs(out_dir, exist_ok=True)
+    #     url1 = "https://zenodo.org/records/17128483/files/LivestockMap.zip?download=1/LivestockMap.zip"
+    #     url2 = "https://zenodo.org/records/17128483/files/MapUncertainty.zip?download=1/MapUncertainty.zip"
 
-        url1 = "https://zenodo.org/records/17128483/files/LivestockMap.zip?download=1/LivestockMap.zip"
-        url2 = "https://zenodo.org/records/17128483/files/MapUncertainty.zip?download=1/MapUncertainty.zip"
+    #     subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "LivestockMap.zip"), url1], check=True)
+    #     subprocess.run(["unzip", "-o", os.path.join(out_dir, "LivestockMap.zip"), "-d", out_dir], check=True)
 
-        subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "LivestockMap.zip"), url1], check=True)
-        subprocess.run(["unzip", "-o", os.path.join(out_dir, "LivestockMap.zip"), "-d", out_dir], check=True)
+    #     subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "MapUncertainty.zip"), url2], check=True)
+    #     subprocess.run(["unzip", "-o", os.path.join(out_dir, "MapUncertainty.zip"), "-d", out_dir], check=True)
 
-        subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "MapUncertainty.zip"), url2], check=True)
-        subprocess.run(["unzip", "-o", os.path.join(out_dir, "MapUncertainty.zip"), "-d", out_dir], check=True)
-
-        # clean up files - not sure why these are included in the repo...
-        subprocess.run( f'rm {os.path.join(out_dir, "*", "._*.tif")}',
-                        shell=True,
-                        )
-        subprocess.run( f'rm -r {os.path.join(out_dir, "__MACOSX")}',
-                        shell=True,
-                        )
-    else:
-        print("Livestock data already present - skipping download and processing")
+    #     # clean up files - not sure why these are included in the repo...
+    #     subprocess.run( f'rm {os.path.join(out_dir, "*", "._*.tif")}',
+    #                     shell=True,
+    #                     )
+    #     subprocess.run( f'rm -r {os.path.join(out_dir, "__MACOSX")}',
+    #                     shell=True,
+    #                     )
+    # else:
+    #     print("Livestock data already present - skipping download and processing")
 
 if __name__ == "__main__":
     get_data()

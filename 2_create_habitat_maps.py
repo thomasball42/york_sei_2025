@@ -8,11 +8,11 @@ import _build_spam_layer
 from _utils import realign_geotiff_origin
 from osgeo import gdal
 
-# os.environ['TMPDIR'] = '/tmp'
-# gdal.SetConfigOption('CPL_TMPDIR', '/tmp')
-gdal.SetCacheMax(3 * 1024 * 1024 * 1024)
+gdal.SetCacheMax(2 * 1024 * 1024 * 1024)
 
-years = ["2020"]
+years = [   "2010", 
+            # "2020"
+            ]
 
 multithread = 32
 overwrite = False
@@ -62,7 +62,7 @@ def main(data_dirs_path=data_dirs_path):
         print(f"AOH-processed habitat maps exist - skipping creation")  
 
     # process pnv habitat map 
-    if not os.path.exists(os.path.join('data', 'habitat', 'pnv', 'lcc_100.tif')) or overwrite or True:
+    if not os.path.exists(os.path.join('data', 'habitat', 'pnv', 'lcc_100.tif')) or overwrite:
         os.makedirs(os.path.join('data', 'habitat', 'pnv'), exist_ok=True)
         print("Processing potential natural vegetation map...")
         # command = f"""aoh-habitat-process --habitat {os.path.join('data', "inputs", 'habitat', 'pnv_raw.tif')} \
@@ -103,7 +103,6 @@ def main(data_dirs_path=data_dirs_path):
         subprocess.run(command, cwd= os.path.join(os.getcwd(), 'LIFE'), shell=True)
         print("done.")
 
-    
     # prepare the modified 'current' map
     with open("data_index.json", 'r') as f:
         data_index = json.load(f)
@@ -139,7 +138,7 @@ def main(data_dirs_path=data_dirs_path):
             if not os.path.isdir(dir):
                 os.makedirs(dir, exist_ok=True)
 
-        if not os.path.isfile(os.path.join(pnv_dir, "lcc_100.tif")) or overwrite or True:
+        if not os.path.isfile(os.path.join(pnv_dir, "lcc_100.tif")) or overwrite:
             print(f"Copying processed PNV map to data dir for year {year}...")
             command = f"""cp {os.path.join('data', 'habitat', 'pnv', "*")} {os.path.join(pnv_dir)}"""
             subprocess.run(command, shell=True)

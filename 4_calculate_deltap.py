@@ -7,12 +7,16 @@ import LIFE.utils.raster_sum
 import LIFE.utils.species_totals
 import LIFE.deltap.delta_p_scaled
 
-years = ["2000", "2005", "2010", "2020"]
+years = [   "2010", 
+            # "2020"
+            ]
+
 
 multithread = 16
-venv_path = "/maps/tsb42/york_sei_2025/env/"
+venv_path = "/maps/tsb42/plantation_life/venv"
 CURVE = "0.25"
-SCENARIOS = ["restore_agriculture"]
+SCENARIOS = ["plantation_world"]
+
 TAXA = ["AMPHIBIA", "AVES", "MAMMALIA", "REPTILIA"]
 
 data_dirs_path = "data/data_dirs"
@@ -39,7 +43,8 @@ def main():
                 {os.path.join(venv_path, "bin", "python3")} \
                 -- {os.path.join("LIFE", "deltap", "global_code_residents_pixel.py")}
                     """
-        subprocess.run(command, shell = True)
+
+        subprocess.run(command, shell = True, check=True)
 
         for scenario in SCENARIOS:
             
