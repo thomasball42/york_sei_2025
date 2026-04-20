@@ -1,9 +1,14 @@
 """creates habitat map for year of interest"""
 
+import itertools
 import json
 import subprocess
 import os
 from pathlib import Path
+from turtle import pd
+
+from git import List
+from pyparsing import Dict
 import _build_spam_layer
 from _utils import realign_geotiff_origin
 from osgeo import gdal
@@ -14,7 +19,7 @@ years = [   "2010",
             # "2020"
             ]
 
-multithread = 32
+multithread = 24
 overwrite = False
 data_dirs_path = "data/data_dirs"
 
@@ -104,7 +109,6 @@ def main(data_dirs_path=data_dirs_path):
         scenario_info = json.load(f)
 
     for year in years:
-        
         # construct the mapspam summed layer
         spam_year_file = os.path.join('data', 'food', "mapspam", f"mapspam_all_{year}.tif")
         if not os.path.isfile(spam_year_file) or overwrite:
@@ -205,24 +209,43 @@ def main(data_dirs_path=data_dirs_path):
             scenario_dir = os.path.join(hab_maps_dir, scenario_name)   
             scenario_codes_to_replace = scenario_data["kwargs"]["scenario_codes_to_replace"]
             scenario_code_to_become = scenario_data["kwargs"]["scenario_code_to_become"]
+            
+            if isinstance(scenario_code_to_become, int):
+                if not os.path.isfile(os.path.join(year_dir, f'{scenario_name}.tif')) or overwrite:
+                    print(f"Creating {scenario_name} habitat map for year {year}...")
+                    import _make_scenario_map
+                    _make_scenario_map.make_scenario_map(
+                        current_path = Path(os.path.join(year_dir, 'current_raw.tif')),
+                        output_path = Path(os.path.join(year_dir, f'{scenario_name}.tif')),
+                        concurrency = int(multithread),
+                        show_progress=True,
+                        scenario_codes_to_replace = scenario_codes_to_replace,
+                        scenario_code_to_become = scenario_code_to_become
+                    )
+                    print("done.")
+                else:
+                    print(f"Scenario map for {scenario_name} exists - skipping creation")
 
-            if os.path.isfile(os.path.join(year_dir, f'{scenario_name}.tif')) or overwrite:
-                print(f"Scenario map exists - skipping creation")
-            else:
-                print(f"Creating {scenario_name} habitat map for year {year}...")
-                import food_life_mapspam._make_scenario_map as _make_scenario_map
-                _make_scenario_map.make_scenario_map(
-                    current_path = Path(os.path.join(year_dir, 'current_raw.tif')),
-                    output_path = Path(os.path.join(year_dir, f'{scenario_name}.tif')),
-                    concurrency = int(multithread),
-                    show_progress=True,
-                    scenario_codes_to_replace = scenario_codes_to_replace,
-                    scenario_code_to_become = scenario_code_to_become
-                )
-                print("done.")
+            elif isinstance(scenario_code_to_become, str) and scenario_code_to_become == "pnv":
+                if not os.path.isfile(os.path.join(year_dir, f'{scenario_name}.tif')) or overwrite:
+                    print(f"Creating {scenario_name} habitat map for year {year}...")
+ 
+                    import _make_regen_scenario_map
+                    _make_regen_scenario_map.make_restore_map(
+                        pnv_path = Path(os.path.join('data', "inputs", 'habitat', 'pnv_raw.tif')),
+                        current_path = Path(os.path.join(year_dir, 'current_raw.tif')),
+                        crosswalk_path = Path(os.path.join('data', 'inputs', 'crosswalk.csv')),
+                        output_path = Path(os.path.join(year_dir, f'{scenario_name}.tif')),
+                        concurrency = int(multithread),
+                        map_replacement_codes = scenario_codes_to_replace,
+                        show_progress=True
+                    )
+                    print("done.")      
+                else:
+                    print(f"{scenario_name} map exists - skipping creation")
 
             if not os.path.isfile(os.path.join(scenario_dir, "lcc_1403.tif")) or overwrite:
-                print(f"Running AOH processing on scenario habitat map for year {year}...")
+                print(f"Running AOH processing on {scenario_name} habitat map for year {year}...")
                 os.makedirs(scenario_dir, exist_ok=True)
                 from aoh.habitat_process import habitat_process
                 habitat_process(
@@ -232,7 +255,6 @@ def main(data_dirs_path=data_dirs_path):
                                 output_directory_path=Path(scenario_dir),
                                 process_count=multithread
                                 )
-
                 print("done.")
             else:
                 print(f"AOH-processed {scenario_name} habitat map for year {year} exists - skipping creation")
@@ -249,7 +271,7 @@ def main(data_dirs_path=data_dirs_path):
                     target_projection=None,
                     concurrency = int(multithread),
                     show_progress=True
-                )
+                    )
                 print("done.")
             else:   
                 print(f"{scenario_name} habitat difference map for year {year} exists - skipping creation")

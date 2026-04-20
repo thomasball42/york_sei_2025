@@ -1,8 +1,32 @@
-{"permissive_plantation" : 
-    {   
-        "kwargs" : {
-                    "scenario_codes_to_replace" : [200, 300, 400],
-                    "scenario_code_to_become" : 1403
-                    }
-    }
+{   
+    "permissive_NR" : 
+        {   
+            "kwargs" : {
+                        "scenario_codes_to_replace" : [ 200, 300, 400,
+                                                        1401, 1402, 1404],
+                        "scenario_code_to_become" : "pnv"
+                        }
+        },
+    "permissive_PL" : 
+        {   
+            "kwargs" : {
+                        "scenario_codes_to_replace" : [ 200, 300, 400,
+                                                        1401, 1402, 1404],
+                        "scenario_code_to_become" : 1403
+                        }
+        },
+    "restrictive_NR" : 
+        {   
+            "kwargs" : {
+                        "scenario_codes_to_replace" : [1402],
+                        "scenario_code_to_become" : "pnv"
+                        }
+        },
+    "restrictive_PL" : 
+        {   
+            "kwargs" : {
+                        "scenario_codes_to_replace" : [1402],
+                        "scenario_code_to_become" : 1403
+                        }
+        }
 }

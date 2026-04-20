@@ -9,9 +9,8 @@ from yirgacheffe.layers import RasterLayer
 from osgeo import gdal
 gdal.SetCacheMax(1 * 1024 * 1024 * 1024)
 
-SCENARIO_CODE = 1403
-CODES_TO_REPLACE = [
-                    200, # Urban and built-up land     
+SCENARIO_CODE = None
+CODES_TO_REPLACE = [    
                     ]
 
 def make_scenario_map(
@@ -26,7 +25,8 @@ def make_scenario_map(
     with RasterLayer.layer_from_file(current_path) as current:
 
         condition = current.isin(scenario_codes_to_replace)
-        scenario_map = yo.where(condition, current, scenario_code_to_become)
+        inverted_condition = yo.where(condition, 0, 1)
+        scenario_map = yo.where(inverted_condition, current, scenario_code_to_become)
 
         with RasterLayer.empty_raster_layer_like(
             scenario_map,

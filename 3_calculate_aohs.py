@@ -2,19 +2,28 @@ import os
 import subprocess
 from pathlib import Path
 import LIFE.utils.speciesgenerator
+import json
 
 years = [   "2010", 
             # "2020"
             ]
 
-multithread = 16
+multithread = 24
 venv_path = "/maps/tsb42/plantation_life/venv"
 
-SCENARIOS = ["current", "pnv", "plantation_world"]
+SCENARIOS = [
+            # "current", "pnv"
+            ]
 
 data_dirs_path = "data/data_dirs"
 
 def main():
+
+    with open("scenarios.json", 'r') as f:
+        scenario_info = json.load(f)
+
+    for scenario_name, scenario_info in scenario_info.items():
+        SCENARIOS.append(scenario_name)
 
     for year in years:
         year_path = os.path.join(data_dirs_path, str(year))
