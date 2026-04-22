@@ -50,9 +50,9 @@ def main():
                         -- --force-habitat \
                         --pixel-area
                         """
-            subprocess.run(command, shell = True)
+            subprocess.run(command, shell = True, check = True)
             
-            for _ in ["pnv", "current", "plantation_world"]:
+            for _ in SCENARIOS:
                 print(f"Collating results {_}...")
                 command = f""" aoh-collate-data --aoh_results {os.path.join(year_path, "aohs", _)} \
                             --output {os.path.join(year_path, "aohs", f"{_}.csv")}
