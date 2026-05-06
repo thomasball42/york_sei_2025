@@ -15,8 +15,9 @@ from osgeo import gdal
 
 gdal.SetCacheMax(2 * 1024 * 1024 * 1024)
 
-years = [   "2010", 
-            # "2020"
+years = [   
+            # "2010", 
+            "2020"
             ]
 
 multithread = 24

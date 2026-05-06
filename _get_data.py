@@ -11,6 +11,8 @@ from easyDataverse import Dataverse  # type: ignore
 import zipfile
 import subprocess
 
+dataverse_api_token = os.environ["DATAVERSE_API_TOKEN"]
+
 def download_file(url, filename):
         try:
             print(f"Attempting to download from: {url}")
@@ -57,7 +59,6 @@ def get_data():
                         doi = info.get("doi")
                         version = info.get("version", "latest")
 
-                        dataverse_api_token = "2e41a1d3-e588-4246-b5ee-3ddf073efbb1" # security is my middle name
                         dataverse = Dataverse("https://dataverse.harvard.edu/",
                             api_token = dataverse_api_token)
 
@@ -69,6 +70,8 @@ def get_data():
                              
                 elif url:
                     
+                    print("test")
+                    quit()
                     # this gets the HYDE data and unzips it
                     download_file(url, target_path)
                     if os.path.isfile(target_path):

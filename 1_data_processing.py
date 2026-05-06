@@ -11,8 +11,10 @@ import _get_country_boundaries
 
 multithread = 16
 overwrite = False
-years = ["2010", "2020"] # hardcoding because I don't think these will change in the immediate future..
+years = ["2020"] 
 data_dirs_path = "data/data_dirs"
+
+SKIP_SP = True
 
 def main(data_dirs_path=data_dirs_path):
     # create directories for intermediate and output data
@@ -34,7 +36,8 @@ def main(data_dirs_path=data_dirs_path):
         print("iucn/Jung crosswalk exists - skipping creation")
 
     _get_data.get_data() # download data if not already present
-    _get_species_data.get_species_data() # download species data if not already present
+    if not SKIP_SP:
+        _get_species_data.get_species_data() # download species data if not already present
     _get_country_boundaries.get_country_data() # download country boundaries if not already present, uses default url = "https://github.com/wmgeolab/geoBoundaries/raw/main/releaseData/CGAZ/geoBoundariesCGAZ_ADM0.zip"
 
     with open("data_urls.json", 'r') as f:
