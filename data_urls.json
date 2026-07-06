@@ -16,9 +16,9 @@
             "version": "4"
         },
         "2020": {
-            "url": "https://dataverse.harvard.edu/file.xhtml?fileId=11596411&version=4.1",
+            "url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/SWPENT&version=6.0",
             "doi": "https://doi.org/10.7910/DVN/SWPENT",
-            "version": "4"
+            "version": "6"
         }
     },
     "hyde": {

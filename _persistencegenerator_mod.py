@@ -29,6 +29,7 @@ def species_generator(
     for taxa in taxas:
         taxa_path = species_info_dir / taxa / "current"
         speciess = list(taxa_path.glob("*.geojson"))
+        
         for scenario in scenarios:
             for species in speciess:
                 res.append([

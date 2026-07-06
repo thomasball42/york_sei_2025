@@ -11,8 +11,10 @@ import _get_country_boundaries
 
 multithread = 16
 overwrite = False
-years = ["2000", "2005", "2010", "2020"] # hardcoding because I don't think these will change in the immediate future..
+years = ["2020"] 
 data_dirs_path = "data/data_dirs"
+
+SKIP_SP = True
 
 def main(data_dirs_path=data_dirs_path):
     # create directories for intermediate and output data
@@ -34,7 +36,8 @@ def main(data_dirs_path=data_dirs_path):
         print("iucn/Jung crosswalk exists - skipping creation")
 
     _get_data.get_data() # download data if not already present
-    _get_species_data.get_species_data() # download species data if not already present
+    if not SKIP_SP:
+        _get_species_data.get_species_data() # download species data if not already present
     _get_country_boundaries.get_country_data() # download country boundaries if not already present, uses default url = "https://github.com/wmgeolab/geoBoundaries/raw/main/releaseData/CGAZ/geoBoundariesCGAZ_ADM0.zip"
 
     with open("data_urls.json", 'r') as f:
@@ -86,7 +89,7 @@ def main(data_dirs_path=data_dirs_path):
         mod_path = os.path.join('data', 'food', 'hyde', "modified_" + os.path.split(hyde_year_path)[1])
 
         # even though they have the same res it's not to the same precision, this sorts that..
-        if not os.path.isfile(mod_path) or overwrite or True:
+        if not os.path.isfile(mod_path) or overwrite:
             if not os.path.isdir(os.path.join("data", "food", "hyde")):
                 os.makedirs(os.path.join("data", "food", "hyde"), exist_ok=True)
             if os.path.isfile(hyde_year_path):

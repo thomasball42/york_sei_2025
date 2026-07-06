@@ -2,22 +2,33 @@ import os
 import subprocess
 from pathlib import Path
 import LIFE.utils.speciesgenerator
+import json
 
-years = ["2000", "2005", "2010", "2020"]
+years = [   "2010", 
+            # "2020"
+            ]
 
-multithread = 16
-venv_path = "/maps/tsb42/york_sei_2025/env/"
+multithread = 24
+venv_path = "/maps/tsb42/plantation_life/venv"
 
-SCENARIOS = ["current", "pnv", "restore_agriculture"]
+SCENARIOS = [
+            # "current", "pnv"
+            ]
 
 data_dirs_path = "data/data_dirs"
 
 def main():
 
+    with open("scenarios.json", 'r') as f:
+        scenario_info = json.load(f)
+
+    for scenario_name, scenario_info in scenario_info.items():
+        SCENARIOS.append(scenario_name)
+
     for year in years:
         year_path = os.path.join(data_dirs_path, str(year))
         
-        if not os.path.isdir(os.path.join(year_path, "aohs")):
+        if not os.path.isdir(os.path.join(year_path, "aohs")) or True:
             os.makedirs(os.path.join(year_path, "aohs"), exist_ok=True)
         
             # this is super quick so don't need to check if it's done
@@ -36,11 +47,12 @@ def main():
                         -j {multithread} \
                         -o {os.path.join(year_path, "aohbatch.log")} \
                         -c {os.path.join(year_path, "aohbatch.csv")} {os.path.join(venv_path, "bin", "aoh-calc")} \
-                        -- --force-habitat
+                        -- --force-habitat \
+                        --pixel-area
                         """
-            subprocess.run(command, shell = True)
+            subprocess.run(command, shell = True, check = True)
             
-            for _ in ["pnv", "current", "restore_agriculture"]:
+            for _ in SCENARIOS:
                 print(f"Collating results {_}...")
                 command = f""" aoh-collate-data --aoh_results {os.path.join(year_path, "aohs", _)} \
                             --output {os.path.join(year_path, "aohs", f"{_}.csv")}

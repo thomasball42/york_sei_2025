@@ -4,7 +4,7 @@ from pathlib import Path
 
 taxa = ["AMPHIBIA", "AVES", "MAMMALIA", "REPTILIA"]
 
-def main():
+def get_species_data():
 
     if os.getenv("DB_USER") is None or os.getenv("DB_PASSWORD") is None:
         exit("Missing credentials - you need to set DB_USER and DB_PASSWORD environment variables (best to ask Michael or Tom!)")
@@ -17,11 +17,11 @@ def main():
         os.makedirs(os.path.join("data", "species-info", taxon), exist_ok=True)
 
         command = f"""python3 ./prepare_species/extract_species_psql.py --class "{taxon}" \
-                                                            --output {os.path.join("..", "data", "inputs", "species-info", taxon)} \a
+                                                            --output {os.path.join("..", "data", "inputs", "species-info", taxon)} \
                                                             --projection "EPSG:4326"
                                                             """
         proc = subprocess.run(command, shell=True, cwd=os.path.join(os.getcwd(), "LIFE"))
         print(f"Done fetching species data for class {taxon}.")
 
 if __name__ == "__main__":
-    main()
+    get_species_data()
