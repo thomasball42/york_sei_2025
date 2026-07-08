@@ -66,7 +66,6 @@ def main():
                 LIFE.utils.raster_sum.raster_sum(
                     images_dir=Path(os.path.join(year_path, "deltap", scenario, CURVE, taxa)),
                     output_filename=Path(os.path.join(sum_dir, f"{taxa}.tif")),
-                    processes_count=multithread
                 )
             
             print("Calculating species totals...")
@@ -82,7 +81,7 @@ def main():
             LIFE.deltap.delta_p_scaled.delta_p_scaled_area(
                 input_path=Path(os.path.abspath(sum_dir)),
                 diff_area_map_path=Path(os.path.join(year_path, f"{scenario}_diff_area.tif")),
-                totals_path=Path(os.path.join(year_path, "deltap", scenario, CURVE, "totals.csv")),
+                species_totals_path=Path(os.path.join(year_path, "deltap", scenario, CURVE, "totals.csv")),
                 output_path=Path(os.path.join(year_path, "deltap_final", f"scaled_{scenario}_{CURVE}.tif"))
             )
 
