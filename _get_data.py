@@ -70,8 +70,6 @@ def get_data():
                              
                 elif url:
                     
-                    print("test")
-                    quit()
                     # this gets the HYDE data and unzips it
                     download_file(url, target_path)
                     if os.path.isfile(target_path):
