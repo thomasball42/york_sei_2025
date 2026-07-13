@@ -1,9 +1,9 @@
 {   
     
-    "agri_to_pnv" : 
+    "all_agri_to_pnv" : 
         {   
             "kwargs" : {
-                        "scenario_codes_to_replace" : [ 1401, 1402, 1404, 1404],
+                        "scenario_codes_to_replace" : [ 1401, 1402, 1403, 1404],
                         "scenario_code_to_become" : "pnv"
                         }
         }
