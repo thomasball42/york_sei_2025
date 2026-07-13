@@ -8,12 +8,12 @@ import LIFE.utils.raster_sum
 import LIFE.utils.species_totals
 import LIFE.deltap.delta_p_scaled
 
-years = [   "2010", 
-            # "2020"
+years = [    
+            "2020"
             ]
 
 multithread = 16
-venv_path = "/maps/tsb42/plantation_life/venv"
+venv_path = "/maps/tsb42/york_sei_2026/venv"
 CURVE = "0.25"
 
 SCENARIOS = [

@@ -16,7 +16,11 @@ import sys
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
-years = ["2000", "2005", "2010", "2020"]
+years = [
+        "2020"
+        ]
+
+scenario = "agri_to_pnv"
 
 data_dirs_path = "data/data_dirs"
 
@@ -117,7 +121,7 @@ def main(data_dirs_path=data_dirs_path, years = years):
         if not os.path.exists(os.path.join(data_dirs_path, "outputs", year)):
             os.makedirs(os.path.join(data_dirs_path, "outputs", year), exist_ok=True)
 
-        deltap_data = os.path.join(data_dirs_path, year, "deltap_final", "scaled_restore_agriculture_0.25.tif")
+        deltap_data = os.path.join(data_dirs_path, year, "deltap_final", f"scaled_{scenario}_0.25.tif")
         deltap_dataset = rasterio.open(deltap_data)
         band_names = deltap_dataset.descriptions
         band_count = deltap_dataset.count
@@ -153,7 +157,7 @@ def main(data_dirs_path=data_dirs_path, years = years):
                     dst_nodata=np.nan,
                 )
                 
-                sp_totals = pd.read_csv(os.path.join(data_dirs_path, year, "deltap", "restore_agriculture", "0.25", "totals.csv"))
+                sp_totals = pd.read_csv(os.path.join(data_dirs_path, year, "deltap", scenario, "0.25", "totals.csv"))
                 sp_count = sp_totals.loc[sp_totals['taxa'] == band_name, 'count'].values[0]
                 
                 for item_name, item_index in spam_data.items():
