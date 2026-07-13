@@ -1,6 +1,6 @@
-Work undertaken by Dr Thomas Ball on behalf of the Stockholm Environment Institute to feed into the JNCC UK impact indicator toolkit. 
+Dr Thomas S Ball, 13/07/2026
 
-This is an updated version of the methods described in this manuscript https://www.nature.com/articles/s43016-025-01224-w. The primary changes are that this version uses MAPSPAM instead of GAEZ to inform the distribution of production for different agricultural commodities. This version is temporally explicit and is calculated for the years 2000, 2005, 2010, and 2020, using matched input data for each year. Both versions use 'HYDE' for pasture and 'GLW' for animal distributions, though this version uses the appropriate year for each
+This is an updated version of the methods described in this manuscript https://www.nature.com/articles/s43016-025-01224-w, updated to take new data into account and to improve pipeline robustness/replicability. This work was undertaken partially on behalf of the Stockholm Environment Institute to feed into the JNCC UK impact indicator toolkit. The primary changes are that this version uses MAPSPAM instead of GAEZ to inform the distribution of production for different agricultural commodities. This version is temporally explicit and is calculated for the years 2000, 2005, 2010, and 2020, using matched input data for each year. Both versions use 'HYDE' for pasture and 'GLW' for animal distributions, though this version uses the appropriate year for each
 
 A major improvement was made in the mapping of 'current' land cover - using an improved algorithm where Martin Jung's 'Global map of terrestrial habitat types' does not agree with crop and pasture distribution according to MAPSPAM or HYDE.
 
