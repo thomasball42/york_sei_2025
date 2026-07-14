@@ -1,5 +1,7 @@
-"""Downloads required input data files from specified URLs (mapspami and hyde databases) 
+"""Downloads required input data files from specified URLs (mapspam and hyde databases) 
 and saves them to designated directories
+
+Also gets GLW data for use in step 5.
 
 Annoyingly gets all the data from dataverse every time at the moment (because the output files aren't named consistently)
 TB 31st Oct 2025"""
@@ -11,7 +13,7 @@ from easyDataverse import Dataverse  # type: ignore
 import zipfile
 import subprocess
 
-dataverse_api_token = os.environ["DATAVERSE_API_TOKEN"]
+skip_spam = True
 
 def download_file(url, filename):
         try:
@@ -40,44 +42,47 @@ def get_data():
     with open('data_urls.json', 'r') as f:
         data_urls = json.load(f)
 
-    for dataname, datasets in data_urls.items():
-        fpath = os.path.join('data', 'inputs', dataname)
-        if not os.path.isdir(fpath):
-            os.makedirs(fpath)
+    if not skip_spam:
+        for dataname, datasets in data_urls.items():
+            fpath = os.path.join('data', 'inputs', dataname)
+            if not os.path.isdir(fpath):
+                os.makedirs(fpath)
 
-        for dataset, info in datasets.items():
-            url = info.get('url')
-            filename = f"{dataname}_{dataset}"
-            target_path = os.path.join(fpath, filename)
+            for dataset, info in datasets.items():
+                url = info.get('url')
+                filename = f"{dataname}_{dataset}"
+                target_path = os.path.join(fpath, filename)
 
-            if not os.path.isfile(target_path):
-
-                if "dataverse" in url.lower():
-                    if not os.path.isdir(target_path):
-                        print(f"\n--- Downloading **{dataset}** ---")
-                        # This gets the mapspam data
-                        doi = info.get("doi")
-                        version = info.get("version", "latest")
-
-                        dataverse = Dataverse("https://dataverse.harvard.edu/",
-                            api_token = dataverse_api_token)
-
-                        dataset = dataverse.load_dataset(
-                            pid=doi,
-                            version=version,
-                            filedir=target_path,
-                        )
-                             
-                elif url:
+                if not os.path.isfile(target_path):
                     
-                    # this gets the HYDE data and unzips it
-                    download_file(url, target_path)
-                    if os.path.isfile(target_path):
-                        with zipfile.ZipFile(target_path, 'r') as zip_ref:
-                            zip_ref.extractall(fpath)
-            
-                else:
-                    print(f"\nError: Missing 'url' or 'doi' in data_urls.json file for **{dataset}**")#
+                    dataverse_api_token = os.environ["DATAVERSE_API_TOKEN"]
+                    
+                    if "dataverse" in url.lower():
+                        if not os.path.isdir(target_path):
+                            print(f"\n--- Downloading **{dataset}** ---")
+                            # This gets the mapspam data
+                            doi = info.get("doi")
+                            version = info.get("version", "latest")
+
+                            dataverse = Dataverse("https://dataverse.harvard.edu/",
+                                api_token = dataverse_api_token)
+
+                            dataset = dataverse.load_dataset(
+                                pid=doi,
+                                version=version,
+                                filedir=target_path,
+                            )
+                                
+                    elif url:
+                        
+                        # this gets the HYDE data and unzips it
+                        download_file(url, target_path)
+                        if os.path.isfile(target_path):
+                            with zipfile.ZipFile(target_path, 'r') as zip_ref:
+                                zip_ref.extractall(fpath)
+                
+                    else:
+                        print(f"\nError: Missing 'url' or 'doi' in data_urls.json file for **{dataset}**")#
 
     # get the base 'current' map - this is the same across all runs.
     if not os.path.isfile(os.path.join('data', "inputs", 'habitat', 'jung_l2_raw.tif')):
@@ -123,28 +128,28 @@ def get_data():
     else:
         print("Elevation data already present - skipping download and processing")
 
-    # out_dir = os.path.join("data", "inputs", "livestock")
-    # if not os.path.isfile(os.path.join(out_dir, "LivestockMap.zip")) or not os.path.isfile(os.path.join(out_dir, "MapUncertainty.zip")):    
-    #     os.makedirs(out_dir, exist_ok=True)
+    out_dir = os.path.join("data", "inputs", "livestock")
+    if not os.path.isfile(os.path.join(out_dir, "LivestockMap.zip")) or not os.path.isfile(os.path.join(out_dir, "MapUncertainty.zip")):    
+        os.makedirs(out_dir, exist_ok=True)
 
-    #     url1 = "https://zenodo.org/records/17128483/files/LivestockMap.zip?download=1/LivestockMap.zip"
-    #     url2 = "https://zenodo.org/records/17128483/files/MapUncertainty.zip?download=1/MapUncertainty.zip"
+        url1 = "https://zenodo.org/records/17128483/files/LivestockMap.zip?download=1/LivestockMap.zip"
+        # url2 = "https://zenodo.org/records/17128483/files/MapUncertainty.zip?download=1/MapUncertainty.zip"
 
-    #     subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "LivestockMap.zip"), url1], check=True)
-    #     subprocess.run(["unzip", "-o", os.path.join(out_dir, "LivestockMap.zip"), "-d", out_dir], check=True)
+        subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "LivestockMap.zip"), url1], check=True)
+        subprocess.run(["unzip", "-o", os.path.join(out_dir, "LivestockMap.zip"), "-d", out_dir], check=True)
 
-    #     subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "MapUncertainty.zip"), url2], check=True)
-    #     subprocess.run(["unzip", "-o", os.path.join(out_dir, "MapUncertainty.zip"), "-d", out_dir], check=True)
+        # subprocess.run(["curl", "-L", "-o", os.path.join(out_dir, "MapUncertainty.zip"), url2], check=True)
+        # subprocess.run(["unzip", "-o", os.path.join(out_dir, "MapUncertainty.zip"), "-d", out_dir], check=True)
 
-    #     # clean up files - not sure why these are included in the repo...
-    #     subprocess.run( f'rm {os.path.join(out_dir, "*", "._*.tif")}',
-    #                     shell=True,
-    #                     )
-    #     subprocess.run( f'rm -r {os.path.join(out_dir, "__MACOSX")}',
-    #                     shell=True,
-    #                     )
-    # else:
-    #     print("Livestock data already present - skipping download and processing")
+        # clean up files - not sure why these are included in the repo...
+        subprocess.run( f'rm {os.path.join(out_dir, "*", "._*.tif")}',
+                        shell=True,
+                        )
+        subprocess.run( f'rm -r {os.path.join(out_dir, "__MACOSX")}',
+                        shell=True,
+                        )
+    else:
+        print("Livestock data already present - skipping download and processing")
 
 if __name__ == "__main__":
     get_data()

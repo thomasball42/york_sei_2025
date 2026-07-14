@@ -13,6 +13,7 @@ import geopandas as gpd
 from tqdm import tqdm
 import warnings
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
@@ -20,9 +21,12 @@ years = [
         "2020"
         ]
 
-scenario = "agri_to_pnv"
+scenario = "all_agri_to_pnv"
+versionid = "_v2r2"
 
 data_dirs_path = "data/data_dirs"
+
+NUM_THREADS = 48
 
 if len(sys.argv) > 1:
     if sys.argv[1] in years:
@@ -60,34 +64,43 @@ def main(data_dirs_path=data_dirs_path, years = years):
     isoa3_str = "shapeGroup"
     country_isos = countries_data[isoa3_str].unique()
 
-    def process_country(country_geom, weights, deltap_dataset, extra_weights=None):
-        """weights are assumed to raw km2 values, extra_weights can be anything"""
-        mask = rasterio.features.geometry_mask(
+    country_masks = {}
+    for iso3 in tqdm(country_isos, desc="Precomputing country masks"):
+        country_geom = countries_data.loc[countries_data[isoa3_str] == iso3.upper(), 'geometry'].values[0]
+        country_masks[iso3] = rasterio.features.geometry_mask(
             [country_geom],
             out_shape=target_shape,
             transform=global_transform,
             invert=True
         )
 
-        if extra_weights is None:
-            extra_mask = np.ones_like(weights, dtype=bool)
-            raw_extra_weights = np.ones_like(weights, dtype=float)
+    # flat pixel indices per country, computed once so per-item/per-band processing
+    # only ever touches the (small) subset of the global raster each country covers,
+    # instead of re-scanning the full 2160x4320 grid for every country every time
+    country_flat_indices = {iso3: np.flatnonzero(mask) for iso3, mask in country_masks.items()}
+
+    def process_country(idx, weights_flat, vals_flat, extra_weights_flat=None):
+        """weights are assumed to be raw km2 values, extra_weights can be anything.
+        idx are the precomputed flat indices of this country's pixels."""
+        w = weights_flat[idx]
+        v = vals_flat[idx]
+
+        if extra_weights_flat is None:
+            extra_valid = np.ones_like(w, dtype=bool)
+            raw_extra_weights = np.ones_like(w, dtype=float)
         else:
-            extra_mask = ~np.isnan(extra_weights)
-            raw_extra_weights = np.where(mask, extra_weights, np.nan)
+            raw_extra_weights = extra_weights_flat[idx]
+            extra_valid = ~np.isnan(raw_extra_weights)
 
-        raw_weights = np.where(mask, weights, np.nan)
-        raw_vals = np.where(mask, deltap_dataset, np.nan)
-
-        valid_indices = (~np.isnan(raw_weights)) & (~np.isnan(raw_vals)) & extra_mask
+        valid_indices = (~np.isnan(w)) & (~np.isnan(v)) & extra_valid
 
         if not np.any(valid_indices):
             return np.nan, np.nan, np.nan, np.nan
 
-        physical_area = np.nansum(raw_weights[valid_indices])
+        physical_area = np.nansum(w[valid_indices])
 
-        weights_used = raw_weights[valid_indices] * raw_extra_weights[valid_indices]
-        vals_used = raw_vals[valid_indices]
+        weights_used = w[valid_indices] * raw_extra_weights[valid_indices]
+        vals_used = v[valid_indices]
 
         weights_normalised = weights_used / np.nansum(weights_used)
 
@@ -112,11 +125,14 @@ def main(data_dirs_path=data_dirs_path, years = years):
                 proportional_output = np.where(proportional_output < 0, no_data, proportional_output)
                 return proportional_output
 
+    output_columns = ["ISO3", "item_name", "band_name", "deltaE_mean", "deltaE_mean_sem", "unit", "pixel_count", "physical_area_km2", "sp_count"]
+    max_workers = min(NUM_THREADS, os.cpu_count() or 1)
+
     # run the thing!
     for year in years:
 
-        output_data = pd.DataFrame()
-        output_file = os.path.join(data_dirs_path, "outputs", year, f"processed_results_{year}.csv")
+        output_file = os.path.join(data_dirs_path, "outputs", year, f"{scenario}_processed_{year}{versionid}.csv")
+        output_rows = []
 
         if not os.path.exists(os.path.join(data_dirs_path, "outputs", year)):
             os.makedirs(os.path.join(data_dirs_path, "outputs", year), exist_ok=True)
@@ -131,15 +147,15 @@ def main(data_dirs_path=data_dirs_path, years = years):
             "path": os.path.join("data", "food", "mapspam", f"mapspam_all_{year}_total_hectares.tif"),
             "unit": 'harvested area in hectares / pixel'
         }
-        
+
         hyde_data = data_index[year]['hyde']
         pasture_path = hyde_data['pasture']['path']
         livestock_files, uncertainty_files = _process_livestock_data.get_livestock_data(year)
-        
+
         total_items = (len(spam_data) + len(livestock_files)) * len(country_isos) * band_count
 
         with tqdm(total=total_items, desc=f"Calculating delta-p ({year}, {len(country_isos)} countries)", unit="item") as pbar:
-            
+
             for band_idx in range(1, band_count + 1):
 
                 # allows the processing of different taxa
@@ -156,18 +172,12 @@ def main(data_dirs_path=data_dirs_path, years = years):
                     src_nodata=deltap_dataset.nodata,
                     dst_nodata=np.nan,
                 )
-                
+
                 sp_totals = pd.read_csv(os.path.join(data_dirs_path, year, "deltap", scenario, "0.25", "totals.csv"))
                 sp_count = sp_totals.loc[sp_totals['taxa'] == band_name, 'count'].values[0]
-                
-                for item_name, item_index in spam_data.items():
-                    
-                    pbar.set_postfix(item=item_name, band=band_name)
 
-                    # print(f"Processing year:{year}, taxa:{band_name}, item:{item_name}...")
-
-                    item_path = item_index['path']
-                    
+                def process_item(item_name, item_path):
+                    """reproject + normalise + per-country stats for one crop item, independent of every other item"""
                     with rasterio.open(item_path) as src:
                         item_dataset = np.full(target_shape, np.nan, dtype=np.float64)
                         reproject(
@@ -184,17 +194,23 @@ def main(data_dirs_path=data_dirs_path, years = years):
 
                     const_array = np.ones_like(pixel_areas)
                     normalised_data = normalise_spam_data_01(item_dataset, const_array, target_shape, unit_conv=100, no_data=np.nan) # using ones here - deltap is already in per-km2, so we just need km2 for the crop vals
-                    
+
+                    weights_flat = normalised_data.ravel()
+                    vals_flat = band_data.ravel()
+
+                    rows = []
                     for iso3 in country_isos:
+                        mean_value, mean_sem, pixel_count, physical_area = process_country(country_flat_indices[iso3], weights_flat, vals_flat)
+                        rows.append((iso3, item_name, band_name, mean_value, mean_sem, "deltaE per km2 per sp.", pixel_count, physical_area, sp_count))
+                    return item_name, rows
 
-                        country_geom = countries_data.loc[countries_data[isoa3_str] == iso3.upper(), 'geometry'].values[0]
-
-                        mean_value, mean_sem, pixel_count, physical_area = process_country(country_geom, normalised_data, band_data)
-
-                        output_data.loc[len(output_data), ["ISO3", "item_name", "band_name", "deltaE_mean", "deltaE_mean_sem", "unit", "pixel_count", "physical_area_km2", "sp_count"]] = [
-                            iso3, item_name, band_name, mean_value, mean_sem, "deltaE per km2 per sp.", pixel_count, physical_area, sp_count]
-                        
-                        pbar.update(1)
+                with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                    futures = {executor.submit(process_item, item_name, item_index['path']): item_name for item_name, item_index in spam_data.items()}
+                    for future in as_completed(futures):
+                        item_name, rows = future.result()
+                        pbar.set_postfix(item=item_name, band=band_name)
+                        output_rows.extend(rows)
+                        pbar.update(len(country_isos))
 
                 with rasterio.open(pasture_path) as src:
                         pasture_data = np.zeros(target_shape, dtype=np.float64)
@@ -210,9 +226,9 @@ def main(data_dirs_path=data_dirs_path, years = years):
                             dst_nodata=np.nan,
                         )
 
-                for file in livestock_files:
+                def process_livestock_item(file):
+                    """reproject + normalise + per-country stats for one livestock file, independent of every other file"""
                     item_name = os.path.basename(file).split(".tif")[0].split("_")[0].upper()
-                    pbar.set_postfix(item=item_name, band=band_name)
 
                     with rasterio.open(file) as src:
                         item_dataset = np.full(target_shape, np.nan, dtype=np.float64)
@@ -231,17 +247,25 @@ def main(data_dirs_path=data_dirs_path, years = years):
                     const_array = np.ones_like(pixel_areas)
                     item_data = normalise_spam_data_01(item_dataset, const_array, target_shape, unit_conv=1, no_data=np.nan) # using ones here - deltap is already in per-km2, so we just need km2 for the crop vals
 
+                    weights_flat = pasture_data.ravel()
+                    vals_flat = band_data.ravel()
+                    extra_weights_flat = item_data.ravel()
+
+                    rows = []
                     for iso3 in country_isos:
+                        mean_value, mean_sem, pixel_count, physical_area = process_country(country_flat_indices[iso3], weights_flat, vals_flat, extra_weights_flat=extra_weights_flat)
+                        rows.append((iso3, item_name, band_name, mean_value, mean_sem, "deltaE per km2 per sp.", pixel_count, physical_area, sp_count))
+                    return item_name, rows
 
-                        country_geom = countries_data.loc[countries_data[isoa3_str] == iso3.upper(), 'geometry'].values[0]
+                with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                    futures = {executor.submit(process_livestock_item, file): file for file in livestock_files}
+                    for future in as_completed(futures):
+                        item_name, rows = future.result()
+                        pbar.set_postfix(item=item_name, band=band_name)
+                        output_rows.extend(rows)
+                        pbar.update(len(country_isos))
 
-                        mean_value, mean_sem, pixel_count, physical_area = process_country(country_geom, pasture_data, band_data, extra_weights=item_data)
-
-                        output_data.loc[len(output_data), ["ISO3", "item_name", "band_name", "deltaE_mean", "deltaE_mean_sem", "unit", "pixel_count", "physical_area_km2", "sp_count"]] = [
-                            iso3, item_name, band_name, mean_value, mean_sem, "deltaE per km2 per sp.", pixel_count, physical_area, sp_count]
-                        
-                        pbar.update(1)
-
+            output_data = pd.DataFrame(output_rows, columns=output_columns)
             output_data.to_csv(output_file, index=False)
 
 if __name__ == "__main__":

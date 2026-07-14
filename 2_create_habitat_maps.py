@@ -21,7 +21,7 @@ years = [
             "2020"
             ]
 
-multithread = 32
+multithread = 24
 overwrite = False
 data_dirs_path = "data/data_dirs"
 

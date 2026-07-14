@@ -14,7 +14,7 @@ multithread = 24
 venv_path = "/maps/tsb42/york_sei_2026/venv"
 
 SCENARIOS = [
-            "current", "pnv"
+            # "current", "pnv",
             ]
 
 data_dirs_path = "data/data_dirs"
@@ -38,7 +38,7 @@ def main():
     for year in years:
         year_path = os.path.join(data_dirs_path, str(year))
         
-        if args.force or not os.path.isdir(os.path.join(year_path, "aohs")) :
+        if args.force or not os.path.isdir(os.path.join(year_path, "aohs")):
             os.makedirs(os.path.join(year_path, "aohs"), exist_ok=True)
         
             # this is super quick so don't need to check if it's done
