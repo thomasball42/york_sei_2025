@@ -80,7 +80,7 @@ def main(data_dirs_path=data_dirs_path):
         spam_year_data = {
             f_name.split(".")[-2].split("_")[-2]: {
                 "path": f_name,
-                "unit": "harvested area in hectares / pixel"
+                "unit": "physical area in hectares / pixel"
             }
             for f_name in spam_year_files
         }
