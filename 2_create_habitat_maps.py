@@ -17,8 +17,8 @@ from _aoh_habitat_process_mod import habitat_process
 gdal.SetCacheMax(2 * 1024 * 1024 * 1024)
 
 years = [   
-            # "2010", 
-            "2020"
+            "2010", 
+            # "2020"
             ]
 
 multithread = 24

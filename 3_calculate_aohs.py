@@ -6,15 +6,15 @@ import LIFE.utils.speciesgenerator
 import json
 
 years = [   
-            # "2010", 
-            "2020"
+            "2010", 
+            # "2020"
             ]
 
 multithread = 24
 venv_path = "/maps/tsb42/york_sei_2026/venv"
 
 SCENARIOS = [
-            # "current", "pnv",
+            "current", "pnv",
             ]
 
 data_dirs_path = "data/data_dirs"

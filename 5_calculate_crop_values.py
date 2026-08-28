@@ -18,7 +18,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 years = [
-        "2020"
+        "2010",
+        # "2020"
         ]
 
 scenario = "all_agri_to_pnv"
@@ -92,7 +93,11 @@ def main(data_dirs_path=data_dirs_path, years = years):
             raw_extra_weights = extra_weights_flat[idx]
             extra_valid = ~np.isnan(raw_extra_weights)
 
-        valid_indices = (~np.isnan(w)) & (~np.isnan(v)) & extra_valid
+        # w == 0 means the crop/livestock genuinely isn't present at that pixel (not missing
+        # data), so it must be excluded here too -- otherwise vals_used/variance end up covering
+        # ~the whole country mask rather than the intersection of the country and where this
+        # item actually has weight, and mean_sem stops meaning anything crop-specific.
+        valid_indices = (~np.isnan(w)) & (~np.isnan(v)) & extra_valid & ((w * raw_extra_weights) > 0)
 
         if not np.any(valid_indices):
             return np.nan, np.nan, np.nan, np.nan

@@ -12,7 +12,10 @@ import _get_country_boundaries
 
 multithread = 16
 overwrite = False
-years = ["2020"]
+years = [
+        "2010",
+        # "2020"
+        ]
 data_dirs_path = "data/data_dirs"
 
 
