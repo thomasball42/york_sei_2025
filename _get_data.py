@@ -129,7 +129,7 @@ def get_data():
         print("Elevation data already present - skipping download and processing")
 
     out_dir = os.path.join("data", "inputs", "livestock")
-    if not os.path.isfile(os.path.join(out_dir, "LivestockMap.zip")) or not os.path.isfile(os.path.join(out_dir, "MapUncertainty.zip")):    
+    if not os.path.isfile(os.path.join(out_dir, "LivestockMap.zip")):# or not os.path.isfile(os.path.join(out_dir, "MapUncertainty.zip")):    
         os.makedirs(out_dir, exist_ok=True)
 
         url1 = "https://zenodo.org/records/17128483/files/LivestockMap.zip?download=1/LivestockMap.zip"

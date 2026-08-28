@@ -20,7 +20,7 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 years = [
         "2010",
-        # "2020"
+        "2020"
         ]
 
 scenario = "all_agri_to_pnv"

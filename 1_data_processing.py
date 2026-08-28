@@ -14,7 +14,7 @@ multithread = 16
 overwrite = False
 years = [
         "2010",
-        # "2020"
+        "2020"
         ]
 data_dirs_path = "data/data_dirs"
 
