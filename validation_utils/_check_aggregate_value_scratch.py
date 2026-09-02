@@ -1,23 +1,22 @@
 """Check delta-p computed for a whole land-use change at once against the
 per-pixel marginal-swap approach used by 4_calculate_deltap.py.
 
-4_calculate_deltap.py computes, for each species and each pixel, the change in
-persistence that would result from swapping just that one pixel from its
-"current" value to its "scenario" value while holding every other pixel fixed,
-then sums those per-pixel marginal changes across the whole raster. Because the
-persistence curve (x**0.25) is non-linear, that sum-of-marginals is only an
-approximation of what actually happens when every changed pixel is swapped
-simultaneously. This script computes the real, non-approximated delta-p for
-each species directly from its actual current-AOH and scenario-AOH totals (the
-AOH rasters produced by 3_calculate_aohs.py already do the heavy lifting), and
-reports it next to the existing pixel-summed totals so the size of the
-linearization error is visible.
+This is a variant of _check_aggregate_value.py pointed at mwd24's
+hybrid_life_correction_v3 data instead of this project's own data_dirs. AOH
+tifs and species-info geojsons there follow the same
+aoh_T<id>A<assessment>_<season> / range_T<id>A<assessment>_<season> IUCN
+naming convention as the main dataset, so filenames are parsed with
+aoh.IUCNFormatFilename the same way. The differences are the directory layout
+(a single dataset under habitat/species-info rather than a per-year
+data_dirs), a single scenario rather than iterating YEARS, and the output
+location.
 """
 
 import csv
 import logging
 import os
 import resource
+import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -26,21 +25,24 @@ from typing import Optional
 from aoh import IUCNFormatFilename
 from yirgacheffe.layers import RasterLayer
 
-from LIFE.deltap.global_code_residents_pixel import calc_persistence_value
+# this script lives in validation_utils/, one level below the repo root where
+# the LIFE package lives -- add the repo root to the path so `import LIFE...`
+# resolves regardless of the working directory it's invoked from.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+from LIFE.deltap.global_code_residents_pixel import calc_persistence_value  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-8s %(message)s")
 logger = logging.getLogger(__name__)
 
-YEARS = ["2010", "2020"]
-SCENARIO = "all_agri_to_pnv"
+DATA_DIR = Path("/maps/mwd24/hybrid_life_correction_v3")
+OUTPUT_DIR = Path("/maps/tsb42/andrew_yardstick/restore_all")
+SCENARIO = "restore_all"
+
 CURVE = "0.25"
 EXP_VAL = 0.25
 TAXA = ["AMPHIBIA", "AVES", "MAMMALIA", "REPTILIA"]
 NUM_THREADS = 48
-EXCL_NEGS = True
-
-data_dirs_path = "data/data_dirs"
-species_info_path = os.path.join("data", "inputs", "species-info")
 
 exponent_func = lambda x: x ** EXP_VAL  # pylint: disable=unnecessary-lambda-assignment
 
@@ -113,12 +115,11 @@ def build_worklist(taxa: str, current_dir: Path, species_info_dir: Path) -> tupl
     driving_groups: dict[int, dict[str, int]] = {}
     for path in species_info_dir.glob("*.geojson"):
         try:
-            taxon_id_str, season = path.stem.rsplit("_", 1)
-            taxon_id = int(taxon_id_str)
+            parts = IUCNFormatFilename.of_filename(path)
         except ValueError:
             logger.warning("Could not parse species-info filename %s, skipping", path)
             continue
-        driving_groups.setdefault(taxon_id, {})[season] = taxon_id
+        driving_groups.setdefault(parts.taxon_id, {})[parts.season] = parts.taxon_id
 
     worklist: list[WorkItem] = []
     skips: list[SkipRow] = []
@@ -219,10 +220,6 @@ def compute_pair(item: WorkItem, pnv_dir: Path, scenario_dir: Path) -> ResultRow
         * calc_persistence_value(scenario_aoh_nonbreeding, historic_aoh_nonbreeding, exponent_func) ** 0.5
     )
 
-    if old_persistence < new_persistence and EXCL_NEGS:
-        return SkipRow(item.taxa, item.taxon_id, item.assessment_id, item.season, "old persistence is greater than new persistence")
-
-    
     return ResultRow(
         taxa=item.taxa, taxon_id=item.taxon_id, assessment_id=item.assessment_id, season=item.season,
         current_aoh_breeding=current_aoh_breeding, current_aoh_nonbreeding=current_aoh_nonbreeding,
@@ -274,8 +271,8 @@ def process_taxa(
     return results, skips
 
 
-def pixel_total_for_taxa(year_dir: Path, taxa: str, scenario: str, curve: str) -> float:
-    path = year_dir / "deltap_sum" / scenario / curve / f"{taxa}.tif"
+def pixel_total_for_taxa(data_dir: Path, taxa: str, scenario: str, curve: str) -> float:
+    path = data_dir / "deltap_sum" / scenario / curve / f"{taxa}.tif"
     if not path.exists():
         logger.warning("Pixel-based deltap_sum raster not found at %s", path)
         return float("nan")
@@ -306,9 +303,8 @@ def write_summary_csv(per_taxa_stats: list[dict], output_path: Path) -> None:
             writer.writerow(row)
 
 
-def process_year(year: str) -> None:
-    year_dir = Path(data_dirs_path) / year
-    out_dir = year_dir / "deltap_aggregate" / SCENARIO / CURVE
+def process_dataset() -> None:
+    out_dir = OUTPUT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
 
     max_workers = min(NUM_THREADS, os.cpu_count() or 1)
@@ -318,16 +314,16 @@ def process_year(year: str) -> None:
     per_taxa_stats: list[dict] = []
 
     for taxa in TAXA:
-        current_dir = year_dir / "aohs" / "current" / taxa
-        info_dir = Path(species_info_path) / taxa / "current"
-        pnv_dir = year_dir / "aohs" / "pnv" / taxa
-        scenario_dir = year_dir / "aohs" / SCENARIO / taxa
+        current_dir = DATA_DIR / "aohs" / "current" / taxa
+        info_dir = DATA_DIR / "species-info" / taxa / "current"
+        pnv_dir = DATA_DIR / "aohs" / "pnv" / taxa
+        scenario_dir = DATA_DIR / "aohs" / SCENARIO / taxa
 
         results, skips = process_taxa(taxa, current_dir, info_dir, pnv_dir, scenario_dir, max_workers)
         all_results.extend(results)
         all_skips.extend(skips)
 
-        pixel_total = pixel_total_for_taxa(year_dir, taxa, SCENARIO, CURVE)
+        pixel_total = pixel_total_for_taxa(DATA_DIR, taxa, SCENARIO, CURVE)
         aggregate_total = sum(r.aggregate_delta_p for r in results)
         per_taxa_stats.append({
             "taxa": taxa,
@@ -355,15 +351,13 @@ def process_year(year: str) -> None:
     write_skipped_csv(all_skips, out_dir / "skipped_species.csv")
     write_summary_csv(per_taxa_stats, out_dir / "summary.csv")
 
-    logger.info("Year %s done. Summary written to %s", year, out_dir / "summary.csv")
+    logger.info("Done. Summary written to %s", out_dir / "summary.csv")
 
 
 def main() -> None:
     _, max_fd_limit = resource.getrlimit(resource.RLIMIT_NOFILE)
     resource.setrlimit(resource.RLIMIT_NOFILE, (max_fd_limit, max_fd_limit))
-
-    for year in YEARS:
-        process_year(year)
+    process_dataset()
 
 
 if __name__ == "__main__":
