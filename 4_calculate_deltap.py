@@ -8,7 +8,8 @@ import LIFE.utils.raster_sum
 import LIFE.utils.species_totals
 import LIFE.deltap.delta_p_scaled
 
-years = [   "2010", 
+years = [   
+            "2010"
             # "2020"
             ]
 

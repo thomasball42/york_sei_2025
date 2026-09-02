@@ -12,17 +12,57 @@ from pyparsing import Dict
 import _build_spam_layer
 from _utils import realign_geotiff_origin
 from osgeo import gdal
+from _aoh_habitat_process_mod import habitat_process
 
 gdal.SetCacheMax(2 * 1024 * 1024 * 1024)
 
 years = [   
-            # "2010", 
-            "2020"
+            "2010", 
+            # "2020"
             ]
 
 multithread = 24
 overwrite = False
 data_dirs_path = "data/data_dirs"
+
+def process_habitat(
+    habitat_path,
+    output_directory_path,
+    pixel_scale=None,
+    width_height=None,
+    target_projection="EPSG:4326",
+    process_count=None,
+
+    realign=False,
+    realign_tolerance=1e-6,
+    exclude_str=None,
+    realign_only = False,
+):  
+    if not realign_only:
+        habitat_process(
+            habitat_path=habitat_path,
+            pixel_scale=pixel_scale,
+            width_height=width_height,
+            target_projection=target_projection,
+            output_directory_path=output_directory_path,
+            process_count=process_count,
+        )
+
+    if realign:
+        all_files = []
+        for path, subdirs, files in os.walk(output_directory_path):
+            for name in files:
+                all_files.append(os.path.join(path, name))
+
+        habitat_files = [
+            f for f in all_files
+            if "lcc_" in f and ".tif" in f and (exclude_str is None or exclude_str not in f)
+        ]
+
+        for hab_file in habitat_files:
+            realign_geotiff_origin(hab_file, tolerance=realign_tolerance)
+
+    print("done.")
 
 def main(data_dirs_path=data_dirs_path):
 
@@ -43,55 +83,40 @@ def main(data_dirs_path=data_dirs_path):
         print(f"Jung base habitat map exists - skipping creation")
 
     # process current habitat map - this is needed to build the food map later
-    if not os.path.isfile(os.path.join('data', 'habitat', "current", 'lcc_1401.tif')) or not os.path.isfile(os.path.join('data', 'habitat', "current", 'lcc_1402.tif')):
+    if not os.path.isfile(os.path.join('data', 'habitat', "current", 'lcc_1401.tif')) or not os.path.isfile(
+        os.path.join('data', 'habitat', "current", 'lcc_1402.tif')):
         print(f"Running some aoh-processing..")
-        from aoh.habitat_process import habitat_process
+        
+        process_habitat(
+            habitat_path=Path(os.path.join('data', 'habitat', "current", 'current_raw.tif')),
+            output_directory_path=Path(os.path.join('data', 'habitat', "current")),
+            # pixel_scale=0.08333333333333333,
+            width_height=(4320, 2160),
+            target_projection="EPSG:4326",
+            process_count=multithread,
+            realign = True,
+            realign_tolerance=1e-6,
+            exclude_str=None
+        )
 
-        habitat_process(
-                        habitat_path=Path(os.path.join('data', 'habitat', "current",'current_raw.tif')),
-                        pixel_scale=0.08333333333333333,
-                        target_projection="EPSG:4326",
-                        output_directory_path=Path(os.path.join('data', 'habitat', "current")),
-                        process_count=multithread
-                        )
-
-        ##### Janky realignment code ######
-        f = []
-        for path, subdirs, files in os.walk(os.path.join("data", "habitat")):
-            for name in files:
-                f.append(os.path.join(path, name))
-        habitat_files = [_ for _ in f if "lcc_" in _ and ".tif" in _ and "pnv" not in _]
-        for hab_file in habitat_files:
-            realign_geotiff_origin(hab_file, tolerance=1E-6)
-        print("done.")
-    else:
-        print(f"AOH-processed habitat maps exist - skipping creation")  
 
     # process pnv habitat map 
     if not os.path.exists(os.path.join('data', 'habitat', 'pnv', 'lcc_100.tif')) or overwrite:
         os.makedirs(os.path.join('data', 'habitat', 'pnv'), exist_ok=True)
         print("Processing potential natural vegetation map...")
-        from aoh.habitat_process import habitat_process
 
-        habitat_process(
-                        habitat_path=Path(os.path.join('data', "inputs", 'habitat', 'pnv_raw.tif')),
-                        pixel_scale=0.08333333333333333,
+        process_habitat(
+                        habitat_path=Path(os.path.join('data', 'inputs', 'habitat', 'pnv_raw.tif')),
+                        output_directory_path=Path(os.path.join('data', 'habitat', 'pnv')),
+                        # pixel_scale=0.08333333333333333,
+                        width_height=(4320, 2160),
                         target_projection="EPSG:4326",
-                        output_directory_path=Path(os.path.join('data', 'habitat', "pnv")),
-                        process_count=multithread
-                        )
-        
-        print("Checking processed habitat map alignment...")
-        ###### Janky realignment code ######
-        # f = []
-        # for path, subdirs, files in os.walk(os.path.join("data", "habitat", "pnv")):
-        #     for name in files:
-        #         f.append(os.path.join(path, name))
-        # habitat_files = [_ for _ in f if "lcc_" in _ and ".tif" in _]
-        # for hab_file in habitat_files:
-        #     realign_geotiff_origin(hab_file, tolerance=1E-6)
-        #     print("done.")
-    
+                        process_count=multithread,
+                        realign = True,
+                        realign_tolerance=1e-6,
+                        exclude_str=None
+                    )
+
     else:
         print(f"AOH-processed PNV map exists - skipping creation")
 
@@ -194,16 +219,17 @@ def main(data_dirs_path=data_dirs_path):
 
         if not os.path.isfile(os.path.join(current_dir, "lcc_1401.tif")) or overwrite:
             os.makedirs(current_dir, exist_ok=True)
-            from aoh.habitat_process import habitat_process
-            habitat_process(
+            process_habitat(
                             habitat_path=Path(os.path.join(year_dir, 'current_raw.tif')),
                             pixel_scale=0.08333333333333333,
+                            # width_height=(4320, 2160),
                             target_projection="EPSG:4326",
                             output_directory_path=Path(current_dir),
-                            process_count=multithread
+                            process_count=multithread,
+                            realign = False,
+                            realign_tolerance=1e-6,
+                            exclude_str=None
                             )
-
-            print("done.")
         
         for scenario_name, scenario_data in scenario_info.items():
             
@@ -248,15 +274,17 @@ def main(data_dirs_path=data_dirs_path):
             if not os.path.isfile(os.path.join(scenario_dir, "lcc_1403.tif")) or overwrite:
                 print(f"Running AOH processing on {scenario_name} habitat map for year {year}...")
                 os.makedirs(scenario_dir, exist_ok=True)
-                from aoh.habitat_process import habitat_process
-                habitat_process(
+                process_habitat(
                                 habitat_path=Path(os.path.join(year_dir, f'{scenario_name}.tif')),
                                 pixel_scale=0.08333333333333333,
+                                # width_height=(4320, 2160),
                                 target_projection="EPSG:4326",
                                 output_directory_path=Path(scenario_dir),
-                                process_count=multithread
+                                process_count=multithread,
+                                realign = False,
+                                realign_tolerance=1e-6,
+                                exclude_str=None
                                 )
-                print("done.")
             else:
                 print(f"AOH-processed {scenario_name} habitat map for year {year} exists - skipping creation")
 

@@ -21,17 +21,21 @@ def summarise_spam_layers(year_data, year, spam_year_file, target_shape=(2160, 4
         file_path = values.get("path")
         
         with rasterio.open(file_path) as src:
+            # mask nodata ourselves before reprojecting: GDAL's warp-level
+            # src_nodata/dst_nodata masking silently fails to match this
+            # file's -3.4028235e+38 sentinel, leaking raw nodata values into the sum
+            data = src.read(1)
+            data = np.where(data == src.nodata, 0, data)
+
             temp_buffer = np.zeros(target_shape, dtype=np.float64)
             reproject(
-                source=rasterio.band(src, 1),
+                source=data,
                 destination=temp_buffer,
                 src_transform=src.transform,
                 src_crs=src.crs,
                 dst_transform=global_transform,
                 dst_crs=src.crs,
                 resampling=Resampling.nearest,
-                src_nodata=src.nodata,
-                dst_nodata=0 # nodata as 0 so it doesn't affect the sum
             )
             
             total_hectares += np.nan_to_num(temp_buffer)

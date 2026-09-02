@@ -1,92 +1,266 @@
 {
-    "2020": {
+    "2010": {
         "mapspam": {
-            "BARL": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_BARL_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "VEGE": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_VEGE_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "BEAN": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_BEAN_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "SORG": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SORG_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "LENT": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_LENT_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "PMIL": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_PMIL_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "TOMA": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TOMA_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "BANA": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_BANA_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "CNUT": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CNUT_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "MILL": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_MILL_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "SUGC": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SUGC_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "TOBA": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TOBA_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "TEMF": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TEMF_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "OILP": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OILP_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
-            "PIGE": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_PIGE_A.tif",
-                "unit": "harvested area in hectares / pixel"
-            },
             "CASS": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CASS_A.tif",
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_CASS_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
             "POTA": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_POTA_A.tif",
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_POTA_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
             "OPUL": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OPUL_A.tif",
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_OPUL_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
             "SUGB": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SUGB_A.tif",
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SUGB_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "SWPO": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SWPO_A.tif",
+            "TEMF": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_TEMF_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "RICE": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RICE_A.tif",
+            "OILP": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_OILP_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "PIGE": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_PIGE_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "TOBA": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_TOBA_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "ACOF": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_ACOF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SUGC": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SUGC_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "BANA": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_BANA_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "CNUT": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_CNUT_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "PMIL": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_PMIL_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "LENT": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_LENT_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SORG": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SORG_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "VEGE": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_VEGE_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "BEAN": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_BEAN_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "BARL": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_BARL_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "YAMS": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_YAMS_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "RCOF": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_RCOF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SESA": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SESA_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "PLNT": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_PLNT_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "COTT": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_COTT_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "TROF": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_TROF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SOYB": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SOYB_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "RAPE": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_RAPE_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SMIL": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SMIL_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SUNF": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SUNF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "GROU": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_GROU_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "OCER": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_OCER_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "OOIL": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_OOIL_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "MAIZ": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_MAIZ_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "ORTS": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_ORTS_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "COWP": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_COWP_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "REST": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_REST_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "CHIC": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_CHIC_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
             "TEAS": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TEAS_A.tif",
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_TEAS_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "OFIB": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_OFIB_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "WHEA": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_WHEA_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "COCO": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_COCO_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SWPO": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_SWPO_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "RICE": {
+                "path": "data/food/mapspam/spam2010v2r0_global_phys_area.geotiff/spam2010V2r0_global_A_RICE_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            }
+        },
+        "hyde": {
+            "pasture": {
+                "path": "data/food/hyde/modified_grazing2010AD.asc",
+                "unit": "grazing area in km2 / pixel"
+            }
+        }
+    },
+    "2020": {
+        "mapspam": {
+            "YAMS": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_YAMS_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "RCOF": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RCOF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SESA": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SESA_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "PLNT": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_PLNT_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "TROF": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TROF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "CITR": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CITR_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "COTT": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_COTT_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SOYB": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SOYB_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "RAPE": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RAPE_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "COFF": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_COFF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "RUBB": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RUBB_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "GROU": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_GROU_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "SUNF": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SUNF_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "OOIL": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OOIL_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "ONIO": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_ONIO_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "OCER": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OCER_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "ORTS": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_ORTS_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "COWP": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_COWP_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "MAIZ": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_MAIZ_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "REST": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_REST_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "CHIC": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CHIC_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
             "OFIB": {
@@ -101,88 +275,92 @@
                 "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_COCO_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "REST": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_REST_A.tif",
+            "TEAS": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TEAS_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "CHIC": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CHIC_A.tif",
+            "SWPO": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SWPO_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "MAIZ": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_MAIZ_A.tif",
+            "RICE": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RICE_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "ORTS": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_ORTS_A.tif",
+            "POTA": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_POTA_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "COWP": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_COWP_A.tif",
+            "OPUL": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OPUL_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "OCER": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OCER_A.tif",
+            "SUGB": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SUGB_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "OOIL": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OOIL_A.tif",
+            "CASS": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CASS_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "ONIO": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_ONIO_A.tif",
+            "OILP": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_OILP_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "SUNF": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SUNF_A.tif",
+            "PIGE": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_PIGE_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "GROU": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_GROU_A.tif",
+            "TEMF": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TEMF_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "RUBB": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RUBB_A.tif",
+            "TOBA": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TOBA_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "COFF": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_COFF_A.tif",
+            "MILL": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_MILL_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "RAPE": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RAPE_A.tif",
+            "SUGC": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SUGC_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "SOYB": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SOYB_A.tif",
+            "CNUT": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CNUT_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "COTT": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_COTT_A.tif",
+            "BANA": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_BANA_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "TROF": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TROF_A.tif",
+            "TOMA": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_TOMA_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "CITR": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_CITR_A.tif",
+            "PMIL": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_PMIL_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "SESA": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SESA_A.tif",
+            "LENT": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_LENT_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "PLNT": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_PLNT_A.tif",
+            "SORG": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_SORG_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "YAMS": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_YAMS_A.tif",
+            "BEAN": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_BEAN_A.tif",
                 "unit": "harvested area in hectares / pixel"
             },
-            "RCOF": {
-                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_RCOF_A.tif",
+            "VEGE": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_VEGE_A.tif",
+                "unit": "harvested area in hectares / pixel"
+            },
+            "BARL": {
+                "path": "data/food/mapspam/spam2020V2r2_global_physical_area.geotiff/spam2020V2r2_global_physical_area/spam2020_V2r2_global_A_BARL_A.tif",
                 "unit": "harvested area in hectares / pixel"
             }
         },

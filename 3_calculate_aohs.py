@@ -1,10 +1,12 @@
+import argparse
 import os
 import subprocess
 from pathlib import Path
 import LIFE.utils.speciesgenerator
 import json
 
-years = [   "2010", 
+years = [   
+            "2010", 
             # "2020"
             ]
 
@@ -19,6 +21,14 @@ data_dirs_path = "data/data_dirs"
 
 def main():
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--force", "-f",
+        action="store_true",
+        help="Force overwrite/rerun even if outputs already exist"
+    )
+    args = parser.parse_args()
+
     with open("scenarios.json", 'r') as f:
         scenario_info = json.load(f)
 
@@ -28,7 +38,7 @@ def main():
     for year in years:
         year_path = os.path.join(data_dirs_path, str(year))
         
-        if not os.path.isdir(os.path.join(year_path, "aohs")) or True:
+        if args.force or not os.path.isdir(os.path.join(year_path, "aohs")):
             os.makedirs(os.path.join(year_path, "aohs"), exist_ok=True)
         
             # this is super quick so don't need to check if it's done
@@ -58,15 +68,18 @@ def main():
                             --output {os.path.join(year_path, "aohs", f"{_}.csv")}
                             """
                 subprocess.run(command, shell = True)
+    
+        if not os.path.isdir(os.path.join(year_path, "predictors")):
+            os.makedirs(os.path.join(year_path, "predictors"), exist_ok=True)
             
-            if os.path.isdir(os.path.join(year_path, "predictors")):
-                os.makedirs(os.path.join(year_path, "predictors"), exist_ok=True)
-            
-            print("Calculating predictors for analysis...")
+        if not os.path.isfile(os.path.join(year_path, "predictors", "species_richness.tif")):
+            print("Calculating species richness...")
             command = f"""aoh-species-richness --aohs_folder {os.path.join(year_path, "aohs", "current")} \
                         --output {os.path.join(year_path, "predictors", "species_richness.tif")}"""
             subprocess.run(command, shell = True)
-            
+        
+        if not os.path.isfile(os.path.join(year_path, "predictors", "endemism.tif")):
+            print("Calculating endemism...")
             command = f"""aoh-endemism --aohs_folder {os.path.join(year_path, "aohs", "current")} \
                         --species_richness {os.path.join(year_path, "predictors", "species_richness.tif")}\
                         --output {os.path.join(year_path, "predictors", "endemism.tif")}"""
